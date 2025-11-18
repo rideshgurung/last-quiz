@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yellow House Contestants - Quiz</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins","Segoe UI",Arial,sans-serif; }
+    body { background: url("school.png") no-repeat center center/cover; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+
+    /* Navbar */
+    nav { 
+      width: 100%; 
+      background: rgba(10,42,102,0.9); 
+      padding:12px 50px; 
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      position:fixed; 
+      top:0; 
+      left:0; 
+      z-index:1000;
+    }
+    nav .logo { display:flex; align-items:center; gap:10px; }
+    nav .logo img { width:40px; }
+    nav .logo h3 { color:#fff; font-size:1.2rem; font-weight:600; }
+
+    nav ul { list-style:none; display:flex; gap:25px; }
+    nav ul li a { text-decoration:none; color:#fff; font-weight:500; transition:0.3s; }
+    nav ul li a:hover { color:#b3c7f7; }
+
+    .contestants-container { background: rgba(225,240,255,0.85); padding:50px 70px 80px 70px; border-radius:28px; max-width:950px; width:95%; text-align:center; margin-top:140px; box-shadow:0 8px 20px rgba(0,0,0,0.15); display:flex; flex-direction:column; justify-content:space-between; min-height:700px; position:relative; }
+    h1 { margin-bottom:20px; color:#0a2a66; font-size:2.3rem; }
+    .tagline { font-size:1.1rem; font-weight:500; color:#333; margin-bottom:35px; font-style:italic; }
+    .photos-container { display:flex; justify-content:space-around; flex-wrap:wrap; gap:30px; margin-bottom:50px; }
+    .photo-box { display:flex; flex-direction:column; align-items:center; width:180px; background:rgba(255,255,255,0.15); border-radius:15px; padding:15px; box-shadow:0 6px 15px rgba(0,0,0,0.1); transition:0.3s; }
+    .photo-box:hover { transform:scale(1.05); box-shadow:0 8px 25px rgba(0,0,0,0.2); }
+    .photo-box img { width:150px; height:150px; object-fit:cover; border-radius:12px; margin-bottom:10px; }
+    .photo-box p { font-weight:600; color:#0a2a66; margin-top:5px; }
+    .bottom-section { margin-top:auto; text-align:center; }
+    .btn { display:inline-block; padding:14px 36px; background:#0a2a66; color:#fff; font-size:1.1rem; font-weight:600; border-radius:12px; text-decoration:none; transition:0.3s; box-shadow:0 6px 14px rgba(0,0,0,0.2); }
+    .btn:hover { transform:scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">
+      <a href="1-1main.html" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+        <img src="logo.png" alt="School Logo">
+        <h3 style="color:white;">Fluorescent Secondary</h3>
+      </a>
+    </div>
+
+    <ul>
+      <li><a href="1-1main.html">Home</a></li>
+      <li><a href="#">Quiz</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="contestants-container">
+    <h1>Yellow House Contestants</h1>
+    <p class="tagline">"Show your knowledge and shine for your house!"</p>
+
+    <div class="photos-container">
+      <div class="photo-box"><img src="yellow1.jpg" alt="Contestant 1"><p>Contestant 1</p></div>
+      <div class="photo-box"><img src="yellow2.jpg" alt="Contestant 2"><p>Contestant 2</p></div>
+      <div class="photo-box"><img src="yellow3.jpg" alt="Contestant 3"><p>Contestant 3</p></div>
+    </div>
+
+    <div class="bottom-section">
+      <a href="2-contestants.html" class="btn">← Back</a>
+    </div>
+  </div>
+
+</body>
+</html>
