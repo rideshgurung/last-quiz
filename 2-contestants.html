@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz - Fluorescent Secondary School</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      background: url("school.png") no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Navbar */
+    nav {
+      width: 100%;
+      background: rgba(10, 42, 102, 0.9);
+      padding: 12px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav .logo img {
+      width: 40px;
+    }
+
+    nav .logo h3 {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #b3c7f7;
+    }
+
+    /* Quiz container */
+    .quiz-container {
+      background: rgba(225, 240, 255, 0.85);
+      padding: 50px 70px 100px 70px;
+      border-radius: 28px;
+      max-width: 950px;
+      width: 95%;
+      text-align: center;
+      margin-top: 140px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 750px;
+      position: relative;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      color: #0a2a66;
+      font-size: 2.3rem;
+    }
+
+    .tagline {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 35px;
+      font-style: italic;
+    }
+
+    /* House container */
+    .house-container {
+      width: 100%;
+      max-width: 340px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      margin: 0 auto 30px auto;
+    }
+
+    .house-container a {
+      text-decoration: none;
+    }
+
+    .house-btn {
+      width: 100%;
+      padding: 22px 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 0;
+    }
+
+    .house-container hr {
+      margin: 5px 0;
+      border: none;
+      border-top: 1px solid rgba(0,0,0,0.15);
+    }
+
+    /* Blue House - Gradient Glow */
+    .blue {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+    .blue:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+    }
+
+    /* Red House */
+    .red {
+      background: #ef4444;
+      color: #fff;
+      border-top: 1px solid #b91c1c;
+    }
+    .red:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+
+    /* Green House */
+    .green {
+      background: #1da750;
+      color: #ffffff;
+      border-top: 1px solid #16a34a;
+    }
+    .green:hover {
+      background: #16a34a;
+      transform: scale(1.05);
+    }
+
+    /* Yellow House */
+    .yellow {
+      background: linear-gradient(135deg, #facc15, #eab308);
+      color: #fff;
+      border-top: 1px solid rgba(234,179,8,0.5);
+    }
+    .yellow:hover {
+      transform: scale(1.05);
+    }
+
+    /* Bottom section */
+    .bottom-section {
+      position: relative;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .bottom-section p {
+      color: #0a2a66;
+      font-weight: 500;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .bottom-section p.bold {
+      font-weight: 800;
+      font-size: 1.4rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: #0a2a66;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+
+    .btn.back {
+      background: #6b7280;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .btn.back:hover {
+      background: #4b5563;
+    }
+
+    .btn.next {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">
+      <a href="1-1main.html" style="display:flex; align-items:center; gap:10px;">
+        <img src="logo.png" alt="School Logo">
+        <h3>Fluorescent Secondary</h3>
+      </a>
+    </div>
+    <ul>
+      <li><a href="1-1main.html">Home</a></li>
+      <li><a href="#">Quiz</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Quiz Section -->
+  <div class="quiz-container">
+    <div>
+      <h1>House Contestants</h1>
+      <p class="tagline">"Knowledge is power, and today is your chance to shine!"</p>
+
+      <div class="house-container">
+        <a href="6-bluehouse.html"><button class="house-btn blue">Blue House</button></a>
+        <hr>
+        <a href="3-redhouse.html"><button class="house-btn red">Red House</button></a>
+        <hr>
+        <a href="5-greenhouse.html"><button class="house-btn green">Green House</button></a>
+        <hr>
+        <a href="4-yellowhouse.html"><button class="house-btn yellow">Yellow House</button></a>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <p>🎓 📖 🏆</p>
+      <p class="bold">Let the best house win!</p>
+      <a href="main.html" class="btn back">← Back</a>
+      <a href="7-roundselection.html" class="btn next">Next Page →</a>
+    </div>
+  </div>
+</body>
+</html>

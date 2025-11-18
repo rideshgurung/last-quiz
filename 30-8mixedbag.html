@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mixed Bag Round</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    }
+
+    /* ✅ Background like Round 2 */
+    body {
+      background-color: #385a85;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding-top: 100px;
+      overflow-y: auto;
+    }
+
+    /* ✅ Nav bar like Round 2 */
+    nav {
+      width: 100%;
+      background: rgba(30, 58, 138, 0.95);
+      padding: 12px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    nav .logo img { width: 40px; }
+    nav .logo h3 {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav ul li a:hover {
+      color: #c7d2fe;
+    }
+
+    /* ✅ White box wrapper like before */
+    .main-wrapper {
+      width: 70%;
+      max-width: 1200px;
+      background: rgba(240, 248, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      padding: 40px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      color: #1e3a8a;
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    /* ✅ Keep your grid layout */
+    .grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      width: 100%;
+    }
+
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    a { text-decoration: none; }
+
+    .box {
+      position: relative;
+      height: 220px;
+      width: 300px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .box:hover {
+      transform: scale(1.07);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    .box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.75);
+      transition: all 0.4s ease;
+      z-index: 1;
+    }
+
+    .box:hover::before {
+      filter: brightness(1);
+      transform: scale(1.1);
+    }
+
+    .title {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+      z-index: 2;
+    }
+
+    /* ✅ Background images */
+    .history::before {
+      background-image: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1000&q=80');
+    }
+
+    .sports::before {
+      background-image: url('https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1000&q=80');
+    }
+
+    .scitech::before {
+      background-image: url('https://static.vecteezy.com/system/resources/previews/049/461/708/non_2x/abstract-image-of-hands-holding-a-glowing-nuclear-atom-symbolizing-science-and-technology-photo.jpeg');
+    }
+
+    .maths::before {
+      background-image: url('https://tse3.mm.bing.net/th/id/OIP.eI8iWEz6Qrhs4r7yMx9ANwHaD4?rs=1&pid=ImgDetMain&o=7&rm=3');
+    }
+
+    .current::before {
+      background-image: url('https://www.compassnewspaper.org/wp-content/uploads/2024/09/Global-Current-Affairs-A-World-View.jpg');
+    }
+
+    .movies::before {
+      background-image: url('https://th.bing.com/th/id/OIP.OiBxINMmxXo1aDdEN5oarwHaEo?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3');
+    }
+
+    .music::before {
+      background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1000&q=80');
+    }
+
+    /* ✅ Navigation buttons (back & next) */
+    .bottom-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn.back {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+
+    .btn.back:hover {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      transform: scale(1.05);
+    }
+
+    .btn.next {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+    }
+
+    .btn.next:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Nav -->
+  <nav>
+    <div class="logo">
+      <img src="logo.png" alt="Logo" />
+      <h3>Fluorescent Secondary</h3>
+    </div>
+    <ul>
+      <li><a href="1-1main.html">Home</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ✅ White content box -->
+  <div class="main-wrapper">
+    <h1>Mixed Bag Round</h1>
+
+    <div class="grid">
+      <div class="row">
+        <a href="31-history.html"><div class="box history"><div class="title">History</div></div></a>
+        <a href="32-sports.html"><div class="box sports"><div class="title">Sports</div></div></a>
+      </div>
+      <div class="row">
+        <a href="33-scienceandtechnology.html"><div class="box scitech"><div class="title">Science & Tech</div></div></a>
+        <a href="34-maths.html"><div class="box maths"><div class="title">Mathematics</div></div></a>
+      </div>
+      <div class="row">
+        <a href="35-currentaffairs.html"><div class="box current"><div class="title">Current Affairs</div></div></a>
+        <a href="36-movie.html"><div class="box movies"><div class="title">Movies</div></div></a>
+      </div>
+      <div class="row">
+        <a href="37-music.html"><div class="box music"><div class="title">Music</div></div></a>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <a href="29-round7rules.html" class="btn back">← Back</a>
+      <a href="31-round8rules.html" class="btn next">Next Round →</a>
+    </div>
+  </div>
+
+</body>
+</html>

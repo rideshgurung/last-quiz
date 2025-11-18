@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluorescent Secondary School - Quiz Competition 2082</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      background: url("school.png") no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Navbar */
+    nav {
+      width: 100%;
+      background: rgba(10, 42, 102, 0.95);
+      padding: 12px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    nav .logo a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    nav .logo img {
+      width: 40px;
+    }
+
+    nav .logo h3 {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #b3c7f7;
+    }
+
+    /* Main content */
+    .overlay {
+      background: rgba(210, 230, 255, 0.85);
+      padding: 50px;
+      border-radius: 20px;
+      max-width: 800px;
+      width: 90%;
+      text-align: center;
+      margin-top: 120px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .overlay .logo a img {
+      width: 110px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #0a2a66;
+      font-size: 2.4rem;
+      font-weight: 800;
+    }
+
+    h2 {
+      color: #222;
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin: 15px 0 35px;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .feature-box {
+      flex: 1;
+      min-width: 220px;
+      padding: 25px 20px;
+      background: rgba(190, 220, 255, 0.85);
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.25s ease, background 0.3s ease;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-6px);
+      background: rgba(170, 210, 255, 0.9);
+    }
+
+    .feature-box h3 {
+      color: #0a2a66;
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .feature-box p {
+      color: #333;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    /* Contestants box */
+    .contestants-box {
+      background: rgba(190, 220, 255, 0.85);
+      border-radius: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 25px 20px;
+      margin-bottom: 40px;
+    }
+
+    .contestants-box h3 {
+      color: #0a2a66;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .contestants {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .contestant {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 14px;
+      padding: 12px;
+      width: 150px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .contestant:hover {
+      transform: translateY(-5px);
+    }
+
+    .contestant img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 8px;
+      border: 3px solid #0a2a66;
+    }
+
+    .contestant h4 {
+      color: #0a2a66;
+      font-size: 1rem;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .contestant p {
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #0a2a66;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      background: #083070;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">
+      <a href="1-1main.html">
+        <img src="logo.png" alt="School Logo">
+        <h3>Fluorescent Secondary</h3>
+      </a>
+    </div>
+    <ul>
+      <li><a href="1-1main.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="overlay">
+    <div class="logo">
+      <a href="1-1main.html">
+        <img src="logo.png" alt="School Logo">
+      </a>
+    </div>
+
+    <h1>Fluorescent Secondary School</h1>
+    <h2>Quiz Competition 2024</h2>
+
+    <div class="features">
+      <div class="feature-box">
+        <h3>🏆 Inter-House Quiz</h3>
+        <p>Engage in a thrilling quiz battle between school houses.</p>
+      </div>
+
+      <div class="feature-box">
+        <h3>📚 Grades 8, 9 & 10</h3>
+        <p>Special competition designed for senior classes.</p>
+      </div>
+
+      <div class="feature-box">
+        <a href="2-contestants.html" class="btn">View Contestants</a>
+      </div>
+    </div>
+
+    <a href="7-roundselection.html" class="btn">Start Quiz</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Round 6 - 4 Pics 1 Word</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins","Segoe UI",Arial,sans-serif; }
+
+body {
+  background-color:#385a85;
+  background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size:30px 30px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+nav {
+  width:100%;
+  background: rgba(30,58,138,0.95);
+  padding:12px 50px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:fixed;
+  top:0; left:0;
+  z-index:1000;
+}
+nav .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:white; }
+nav .logo img { width:40px; }
+nav .logo h3 { font-size:1.2rem; font-weight:600; }
+nav ul { list-style:none; display:flex; gap:25px; }
+nav ul li a { color:white; text-decoration:none; font-weight:500; transition:0.3s; }
+nav ul li a:hover { color:#c7d2fe; }
+
+.main-wrapper {
+  display:flex;
+  width:90%;
+  max-width:1200px;
+  margin-top:100px;
+  border-radius:15px;
+  overflow:hidden;
+  min-height:700px;
+  background:rgba(240,248,255,0.9);
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.questions-panel { flex:3; padding:40px 60px; display:flex; flex-direction:column; align-items:center; }
+.round-title h1 { font-size:2.4rem; color:#1e3a8a; margin-bottom:5px; }
+.round-title h1 span { color:#2563eb; font-size:1.7rem; }
+.underline { width:220px; height:4px; background-color:#2563eb; margin:15px 0 25px; border-radius:2px; }
+.choose-text { font-size:1.2rem; font-weight:600; margin-bottom:20px; color:#1e3a8a; }
+
+.container {
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:25px;
+  width:100%;
+  max-width:700px;
+}
+
+.question-btn {
+  padding:30px;
+  border-radius:12px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border:2px solid #1e40af;
+  color:white;
+  font-size:1.5rem;
+  cursor:pointer;
+  text-align:center;
+  transition:0.3s;
+  box-shadow:0 0 12px rgba(37,99,235,0.3);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.question-btn:hover { transform:scale(1.07); background: linear-gradient(135deg, #2563eb, #1e3a8a); }
+.question-btn.active { background: linear-gradient(135deg, #1e3a8a, #172554); color:#a5b4fc; transform:scale(1.05); }
+
+.action-panel { flex:1; background: rgba(237,245,252,0.9); padding:40px; display:flex; flex-direction:column; justify-content:flex-start; gap:20px; border-left:2px solid rgba(30,58,138,0.4); }
+.btn { padding:15px; border-radius:12px; text-align:center; color:white; font-weight:700; text-decoration:none; font-size:1.1rem; transition:0.3s; }
+.next { background: linear-gradient(135deg, #2563eb, #1e40af); } 
+.next:hover { transform: scale(1.05); }
+.back { background: linear-gradient(135deg, #3b82f6, #2563eb); } 
+.back:hover { transform: scale(1.05); }
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="1-1main.html" class="logo">
+    <img src="logo.png" />
+    <h3>Fluorescent Secondary</h3>
+  </a>
+  <ul>
+    <li><a href="1-1main.html">Home</a></li>
+    <li><a href="quiz.html">Quiz</a></li>
+    <li><a href="#">Results</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="main-wrapper">
+  <div class="questions-panel">
+    <div class="round-title">
+      <h1>Round 6 <span>4 Pics 1 Word</span></h1>
+      <div class="underline"></div>
+    </div>
+    <p class="choose-text">Choose your question</p>
+
+    <div class="container">
+      <a href="20-4pic1wordq1.html" class="question-btn" data-id="q1">Q1</a>
+      <a href="22-4pic1wordq2.html" class="question-btn" data-id="q2">Q2</a>
+      <a href="23-4pic1wordq3.html" class="question-btn" data-id="q3">Q3</a>
+      <a href="24-4pic1wordq4.html" class="question-btn" data-id="q4">Q4</a>
+      <a href="25-4pic1wordq5.html" class="question-btn" data-id="q5">Q5</a>
+      <a href="26-4pic1wordq6.html" class="question-btn" data-id="q6">Q6</a>
+      <a href="27-4pic1wordq7.html" class="question-btn" data-id="q7">Q7</a>
+      <a href="28-4pic1wordq8.html" class="question-btn" data-id="q8">Q8</a>
+    </div>
+  </div>
+
+  <div class="action-panel">
+    <a class="btn next" href="20-round7rules.html">Next Round →</a>
+    <a class="btn back" href="18-round6rules.html">← Back</a>
+  </div>
+</div>
+
+<script>
+const buttons = document.querySelectorAll(".question-btn");
+
+// Load session data for already clicked buttons
+const clickedQuestions = JSON.parse(sessionStorage.getItem("clickedQuestions") || "[]");
+
+// Apply active class to buttons that were previously clicked
+buttons.forEach(btn => {
+  if(clickedQuestions.includes(btn.dataset.id)){
+    btn.classList.add("active");
+  }
+
+  btn.addEventListener("click", () => {
+    // Darken the button immediately
+    btn.classList.add("active");
+
+    // Add to session storage if not already there
+    if(!clickedQuestions.includes(btn.dataset.id)){
+      clickedQuestions.push(btn.dataset.id);
+      sessionStorage.setItem("clickedQuestions", JSON.stringify(clickedQuestions));
+    }
+  });
+});
+</script>
+
+</body>
+</html>

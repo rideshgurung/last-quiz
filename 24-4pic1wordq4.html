@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Round 2 - 4 Pics 1 Word</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      background-color: #385a85;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #1f2937;
+    }
+
+    /* NAVIGATION BAR */
+    nav {
+      width: 100%;
+      background: rgba(30, 58, 138, 0.95);
+      padding: 10px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    nav .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    nav .logo img {
+      width: 35px;
+    }
+    nav .logo h3 {
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 0.95rem;
+    }
+    nav ul li a:hover {
+      color: #c7d2fe;
+    }
+
+    /* MAIN WRAPPER */
+    .main-wrapper {
+      display: flex;
+      width: 95%;
+      max-width: 1000px;
+      height: 90vh;
+      margin-top: 70px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      background: rgba(240, 248, 255, 0.95);
+    }
+
+    /* LEFT PANEL */
+    .questions-panel {
+      flex: 3;
+      padding: 25px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 🔹 UPDATED TITLE STYLING */
+    .round-title {
+      text-align: center;
+      margin-bottom: 5px; /* reduced spacing */
+    }
+
+    .round-title h1 {
+      font-size: 2.5rem; /* bigger title */
+      color: #1e3a8a;
+      font-weight: 800;
+      line-height: 1.1; /* tighter vertical spacing */
+    }
+
+    .round-title h1 span {
+      font-size: 2.2rem;
+      color: #2563eb;
+    }
+
+    .underline {
+      width: 160px;
+      height: 3px;
+      background-color: #2563eb;
+      border-radius: 2px;
+      margin: 8px auto 10px;
+    }
+
+    /* 🔹 UPDATED IMAGE SIZE */
+    .image-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .image-container img {
+      width: 80%; /* increased from 60% */
+      max-width: 500px; /* bigger max size */
+      border-radius: 10px;
+      border: 2px solid #2563eb;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s ease;
+    }
+
+    .image-container img:hover {
+      transform: scale(1.03);
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      color: #1e3a8a;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .show-answer-btn {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .show-answer-btn:hover {
+      background: linear-gradient(135deg, #1e3a8a, #172554);
+      transform: scale(1.05);
+    }
+
+    .answer {
+      margin-top: 10px;
+      font-size: 1.3rem;
+      color: #2563eb;
+      font-weight: 700;
+      display: none;
+    }
+
+    /* RIGHT PANEL */
+    .action-panel {
+      flex: 0.8;
+      background: rgba(237, 245, 252, 0.95);
+      display: flex;
+      flex-direction: column;
+      border-left: 2px solid rgba(30, 58, 138, 0.5);
+    }
+
+    .nav-section {
+      flex: 0.25;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      border-bottom: 2px solid rgba(30, 58, 138, 0.3);
+    }
+
+    .question-section {
+      flex: 0.75;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .question-section h3 {
+      color: #1e3a8a;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .question-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .q-btn {
+      padding: 10px 0;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+    }
+
+    .q-btn:hover {
+      background: linear-gradient(135deg, #1e3a8a, #172554);
+      transform: scale(1.05);
+    }
+
+    .btn {
+      display: block;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 10px;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+      color: white;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+    }
+
+    .btn.back {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+    .btn.back:hover {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      transform: scale(1.05);
+    }
+
+    .btn.next {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+    }
+    .btn.next:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <img src="logo.png" alt="School Logo" />
+      <h3>Fluorescent Secondary</h3>
+    </div>
+    <ul>
+      <li><a href="main.html">Home</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-wrapper">
+    <div class="questions-panel">
+      <div class="round-title">
+        <h1><span>4 Pics 1 Word</span></h1>
+        <div class="underline"></div>
+      </div>
+
+      <div class="image-container">
+        <img src="logo.png" alt="Main Image">
+      </div>
+
+      <p class="question-text">Guess the one word that connects all pictures!</p>
+
+      <button class="show-answer-btn" id="showAnswerBtn">Show Answer</button>
+      <p class="answer" id="answer">🌟 ANSWER: ExampleWord 🌟</p>
+    </div>
+
+    <div class="action-panel">
+      <div class="nav-section">
+        <a href="29-round7rules.html" class="btn next">Next Round →</a>
+        <a href="19-74pic1word.html" class="btn back">← Back</a>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const showBtn = document.getElementById("showAnswerBtn");
+    const answer = document.getElementById("answer");
+
+    showBtn.addEventListener("click", () => {
+      answer.style.display = "block";
+      showBtn.style.display = "none";
+    });
+  </script>
+</body>
+</html>

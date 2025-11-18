@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Round Selection</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      background-color: #385a85;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #1f2937;
+    }
+
+    /* NAVIGATION BAR */
+    nav {
+      width: 100%;
+      background: rgba(30, 58, 138, 0.95);
+      padding: 12px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    nav .logo { display: flex; align-items: center; gap: 10px; }
+    nav .logo img { width: 40px; }
+    nav .logo h3 { color: #fff; font-size: 1.2rem; font-weight: 600; }
+    nav ul { list-style: none; display: flex; gap: 25px; }
+    nav ul li a { text-decoration: none; color: #fff; font-weight: 500; transition: color 0.3s; }
+    nav ul li a:hover { color: #c7d2fe; }
+
+    /* MAIN WRAPPER */
+    .main-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 1200px;
+      margin-top: 100px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      min-height: 700px;
+      background: rgba(240, 248, 255, 0.9);
+      padding: 40px;
+    }
+
+    /* ROUND SELECTION */
+    .round-title { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; text-align: center; }
+    .round-title h1 { font-size: 2.3rem; color: #1e3a8a; font-weight: 700; }
+    .underline { width: 220px; height: 4px; background-color: #2563eb; border-radius: 2px; margin: 10px 0 20px 0; }
+    .choose-text { font-size: 1.2rem; font-weight: 500; color: #1e3a8a; margin-bottom: 30px; }
+
+    /* GRID OF ROUND BUTTONS */
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 buttons per row */
+      gap: 20px;
+      width: 100%;
+      max-width: 700px;
+      justify-items: center;
+    }
+    .question-btn {
+      padding: 25px;
+      width: 100%;
+      text-align: center;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      border: 2px solid #1e40af;
+      border-radius: 12px;
+      font-size: 1.3em;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+    }
+    .question-btn:hover { transform: scale(1.05); background: linear-gradient(135deg, #2563eb, #1e3a8a); }
+    .question-btn.active { background: linear-gradient(135deg, #1e3a8a, #172554); color: #a5b4fc; transform: scale(1.03); }
+
+    /* BACK BUTTON */
+    .btn.back {
+      margin-top: 40px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: all 0.4s ease;
+    }
+    .btn.back:hover { background: linear-gradient(135deg, #2563eb, #1d4ed8); transform: scale(1.05); }
+
+    /* RESPONSIVE GRID */
+    @media(max-width:900px){ .container{ grid-template-columns: repeat(2,1fr); } }
+    @media(max-width:500px){ .container{ grid-template-columns: 1fr; } }
+
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="1-1main.html" class="logo" style="text-decoration:none; color:inherit;">
+  <img src="logo.png" alt="School Logo" />
+  <h3>Fluorescent Secondary</h3>
+</a>
+
+    <ul>
+      <li><a href="1-1main.html">Home</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-wrapper">
+    <div class="round-title">
+      <h1>Round Selection</h1>
+      <div class="underline"></div>
+    </div>
+    <p class="choose-text">Select a round to play:</p>
+
+    <div class="container">
+      <a href="8-round1rules.html" class="question-btn" data-id="round1">Round 1</a>
+      <a href="roundrules2.html" class="question-btn" data-id="round2">Round 2</a>
+      <a href="roundrules3.html" class="question-btn" data-id="round3">Round 3</a>
+      <a href="roundrules4.html" class="question-btn" data-id="round4">Round 4</a>
+      <a href="roundrules5.html" class="question-btn" data-id="round5">Round 5</a>
+      <a href="roundrules6.html" class="question-btn" data-id="round6">Round 6</a>
+      <a href="roundrules7.html" class="question-btn" data-id="round7">Round 7</a>
+      <a href="roundrules8.html" class="question-btn" data-id="round8">Round 8</a>
+      <a href="roundrules9.html" class="question-btn" data-id="round9">Round 9</a>
+      <a href="roundrules10.html" class="question-btn" data-id="round10">Round 10</a>
+    </div>
+
+    <a href="2-contestants.html" class="btn back">← Back</a>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll(".question-btn");
+    const selectedRounds = JSON.parse(localStorage.getItem("selectedRounds")) || [];
+
+    buttons.forEach(btn => {
+      if (selectedRounds.includes(btn.dataset.id)) {
+        btn.classList.add("active");
+      }
+
+      btn.addEventListener("click", () => {
+        btn.classList.add("active");
+        if (!selectedRounds.includes(btn.dataset.id)) {
+          selectedRounds.push(btn.dataset.id);
+          localStorage.setItem("selectedRounds", JSON.stringify(selectedRounds));
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Round 3 Buzzer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      background-color: #385a85;
+      background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    nav {
+      width: 100%;
+      background: rgba(30, 58, 138, 0.95);
+      padding: 12px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    nav .logo a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    nav .logo img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    nav .logo h3 {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #c7d2fe;
+    }
+
+    .buzzer-container {
+      background: rgba(240, 248, 255, 0.9);
+      margin-top: 110px;
+      max-width: 1250px;
+      width: 95%;
+      padding: 70px;
+      border-radius: 25px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.55);
+      text-align: center;
+    }
+
+    h1 {
+      color: #1e3a8a;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .title-underline {
+      width: 220px;
+      height: 4px;
+      background-color: #2563eb;
+      margin: 10px auto 30px auto;
+      border-radius: 2px;
+    }
+
+    .question-display {
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 25px;
+      font-size: 3rem;
+      color: #1e3a8a;
+      margin: 25px 0;
+      min-height: 80px;
+      box-shadow: 0 6px 20px rgba(10, 42, 102, 0.15);
+    }
+
+    .answer-box {
+      background: rgba(237, 245, 252, 0.95);
+      border: 2px dashed #1e3a8a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+      font-size: 2.5rem;
+      color: #1e3a8a;
+      display: none;
+    }
+
+    .controls-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      border: none;
+      padding: 14px 26px;
+      border-radius: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(37, 99, 235, 0.35);
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    .btn:hover {
+      transform: scale(1.07);
+      background: linear-gradient(135deg, #2563eb, #1e3a8a);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #3b82f6, #1e40af);
+    }
+
+    .flex-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .house-btn {
+      border: none;
+      border-radius: 16px;
+      padding: 32px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s, box-shadow 0.3s, filter 0.3s;
+    }
+
+    .house-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .selected {
+      box-shadow: 0 0 35px 12px rgba(37, 99, 235, 0.7);
+      transform: scale(1.08);
+      filter: brightness(1.1);
+    }
+
+    .yellow { background: #facc15; color: #222; }
+    .blue { background: #3b82f6; }
+    .red { background: #ef4444; }
+    .green { background: #10b981; }
+
+    .next-round-btn {
+      margin-top: 35px;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      padding: 16px 32px;
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.15rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 18px rgba(37, 99, 235, 0.35);
+      transition: transform 0.3s ease;
+    }
+
+    .next-round-btn:hover {
+      transform: scale(1.07);
+      background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+    }
+
+    .next-round-btn span {
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: 700px) {
+      .flex-grid {
+        grid-template-columns: 1fr;
+      }
+      .controls-row .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <a href="1-1main.html">
+        <img src="logo.png" alt="Logo" />
+        <h3>Fluorescent Secondary</h3>
+      </a>
+    </div>
+    <ul>
+      <li><a href="1-1main.html">Home</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="#">Results</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="buzzer-container">
+    <h1>Round 3 Buzzer Round</h1>
+    <div class="title-underline"></div>
+
+    <div id="questionBox" class="question-display">Press “Next Question” to start!</div>
+    <div id="answerBox" class="answer-box"></div>
+
+    <div class="controls-row">
+      
+      <button id="nextQuestionBtn" class="btn">Next Question</button>
+      <button id="revealBtn" class="btn" disabled>Reveal Answer</button>
+    </div>
+
+    <div class="flex-grid houses">
+      <button class="house-btn yellow" data-house="Yellow">Yellow House</button>
+      <button class="house-btn blue" data-house="Blue">Blue House</button>
+      <button class="house-btn red" data-house="Red">Red House</button>
+      <button class="house-btn green" data-house="Green">Green House</button>
+    </div>
+    <button class="back-btn btn" onclick="goBack()">← Back</button>
+    <button class="next-round-btn" onclick="goToNextRound()">Start Next Round <span>→</span></button>
+  </main>
+
+  <script>
+    const questions = [
+      { q: "adjhashduiahsdiu asiud aisdaisu hdaiushdiuasiuda shdoashdh auis d ajsndijasnd?", a: "abiral" },
+      { q: "Who painted the Mona Lisa?", a: "Leonardo da Vinci" },
+      { q: "Which planet is known as the Red Planet?", a: "Mars" },
+      { q: "What is the chemical symbol for Gold?", a: "Au" },
+      { q: "Which is the fastest land animal?", a: "Cheetah" },
+      { q: "Who wrote the play 'Hamlet'?", a: "William Shakespeare" }
+    ];
+
+    const qBox = document.getElementById("questionBox");
+    const aBox = document.getElementById("answerBox");
+    const nextBtn = document.getElementById("nextQuestionBtn");
+    const revealBtn = document.getElementById("revealBtn");
+    const houseBtns = document.querySelectorAll(".house-btn");
+
+    let currentQuestion = -1;
+    let selectedHouse = null;
+
+    nextBtn.addEventListener("click", () => {
+      currentQuestion++;
+      if (currentQuestion >= questions.length) {
+        qBox.textContent = "No more questions!";
+        aBox.style.display = "none";
+        revealBtn.disabled = true;
+        return;
+      }
+      const current = questions[currentQuestion];
+      qBox.textContent = `Q${currentQuestion + 1}. ${current.q}`;
+      aBox.textContent = current.a;
+      aBox.style.display = "none";
+      revealBtn.disabled = true;
+      selectedHouse = null;
+      houseBtns.forEach(b => b.classList.remove("selected"));
+    });
+
+    houseBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        houseBtns.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        selectedHouse = btn.dataset.house;
+        revealBtn.disabled = false;
+      });
+    });
+
+    revealBtn.addEventListener("click", () => {
+      if (currentQuestion < 0) return alert("Start the round first!");
+      aBox.style.display = "block";
+    });
+
+    function goToNextRound() {
+      window.location.href = "14-round4rules.html";
+    }
+
+    function goBack() {
+      window.location.href = "12-round3rules.html";
+    }
+  </script>
+</body>
+</html>
