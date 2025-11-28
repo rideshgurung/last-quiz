@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Multi-Round Scoreboard — Classy</title>
+<style>
+  :root{
+    --bg:#0d0d0d;
+    --panel:#141414;
+    --muted:#bdbdbd;
+    --accent:#4caf50;
+    --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:#fff;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px;
+  }
+
+  header{ text-align:center; margin-bottom:18px }
+  h1{ font-size:28px; margin:0 0 6px; letter-spacing:0.6px }
+  .roundLabel{ color:var(--muted); font-size:14px }
+
+  /* layout */
+  .grid{
+    width:100%;
+    max-width:1100px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+  }
+
+  .house{
+    background:var(--panel);
+    border-radius:12px;
+    padding:18px;
+    border-left:8px solid transparent;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    min-height:170px;
+  }
+  .house h2{ margin:0; font-size:18px; text-transform:uppercase; letter-spacing:0.6px }
+  .score{ font-size:40px; font-weight:700; margin:0; }
+  .btn-row{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center }
+  .btn{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color:#fff;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    min-width:68px;
+    text-align:center;
+    font-weight:600;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{ transform:scale(.98) }
+  .btn.positive{ box-shadow:0 6px 18px rgba(0,0,0,0.5) }
+  .btn.negative{ opacity:.95; border-color: rgba(255,255,255,0.04) }
+
+  /* colors for houses */
+  .red{ border-left-color:#ff3b3b }
+  .blue{ border-left-color:#3b7bff }
+  .green{ border-left-color:#45ff3b }
+  .yellow{ border-left-color:#ffe53b; color:#111 }
+
+  /* controls */
+  .controls{
+    margin-top:16px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .primary{
+    background:linear-gradient(180deg, #277a2a, #1f5f20);
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+  }
+  .muted{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    color:var(--muted);
+    padding:8px 12px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+
+  /* leaderboard overlay (keeps main page visible behind) */
+  .overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(2,2,2,0.6);
+    z-index:40;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .22s ease;
+  }
+  .overlay.show{ opacity:1; pointer-events:auto }
+
+  .panel{
+    width:min(720px,94%);
+    background:var(--panel);
+    border-radius:12px;
+    padding:22px;
+    text-align:left;
+    box-shadow:0 20px 40px rgba(0,0,0,0.6);
+    animation:pop .12s ease;
+  }
+  @keyframes pop{ from { transform:translateY(8px); opacity:0 } to { transform:none; opacity:1 } }
+
+  .panel h3{ margin:0 0 8px; font-size:20px }
+  .ranks{ display:flex; flex-direction:column; gap:8px; margin:10px 0 14px }
+  .rankRow{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:8px; background:var(--glass) }
+  .rankRow .name{ text-transform:uppercase; font-weight:700; letter-spacing:0.6px }
+  .rankRow .value{ font-weight:800; font-size:18px }
+
+  .panel .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:6px }
+  .badge{ font-size:13px; padding:6px 8px; border-radius:8px; background:rgba(255,255,255,0.04) }
+
+  /* ceremony */
+  .ceremony{
+    margin-top:18px;
+    width:100%;
+    max-width:720px;
+    text-align:center;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-radius:12px;
+    padding:22px;
+    display:none;
+  }
+  .ceremony.show{ display:block }
+  .winner{
+    font-size:22px;
+    font-weight:800;
+    margin:8px 0;
+  }
+
+  /* small screens */
+  @media (max-width:720px){
+    .grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>House Scoreboard</h1>
+    <div class="roundLabel" id="roundLabel">Round 1 of 11</div>
+  </header>
+
+  <main style="width:100%;max-width:1100px;">
+    <section class="grid" id="housesGrid">
+      <div class="house red" data-house="red">
+        <h2>Red</h2>
+        <p class="score" id="score-red">0</p>
+        <div class="btn-row">
+          <button class="btn positive" data-house="red" data-value="5">+5</button>
+          <button class="btn positive" data-house="red" data-value="10">+10</button>
+          <button class="btn positive" data-house="red" data-value="20">+20</button>
+          <button class="btn negative" data-house="red" data-value="-5">−5</button>
+          <button class="btn negative" data-house="red" data-value="-10">−10</button>
+        </div>
+      </div>
+
+      <div class="house blue" data-house="blue">
+        <h2>Blue</h2>
+        <p class="score" id="score-blue">0</p>
+        <div class="btn-row">
+          <button class="btn positive" data-house="blue" data-value="5">+5</button>
+          <button class="btn positive" data-house="blue" data-value="10">+10</button>
+          <button class="btn positive" data-house="blue" data-value="20">+20</button>
+          <button class="btn negative" data-house="blue" data-value="-5">−5</button>
+          <button class="btn negative" data-house="blue" data-value="-10">−10</button>
+        </div>
+      </div>
+
+      <div class="house green" data-house="green">
+        <h2>Green</h2>
+        <p class="score" id="score-green">0</p>
+        <div class="btn-row">
+          <button class="btn positive" data-house="green" data-value="5">+5</button>
+          <button class="btn positive" data-house="green" data-value="10">+10</button>
+          <button class="btn positive" data-house="green" data-value="20">+20</button>
+          <button class="btn negative" data-house="green" data-value="-5">−5</button>
+          <button class="btn negative" data-house="green" data-value="-10">−10</button>
+        </div>
+      </div>
+
+      <div class="house yellow" data-house="yellow">
+        <h2>Yellow</h2>
+        <p class="score" id="score-yellow">0</p>
+        <div class="btn-row">
+          <button class="btn positive" data-house="yellow" data-value="5">+5</button>
+          <button class="btn positive" data-house="yellow" data-value="10">+10</button>
+          <button class="btn positive" data-house="yellow" data-value="20">+20</button>
+          <button class="btn negative" data-house="yellow" data-value="-5">−5</button>
+          <button class="btn negative" data-house="yellow" data-value="-10">−10</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="controls">
+      <button id="finishRoundBtn" class="primary">Finish Round</button>
+      <button id="saveBtn" class="muted">Save Now</button>
+      <button id="resetBtn" class="muted">Reset All</button>
+    </div>
+
+    <section class="ceremony" id="ceremony">
+      <!-- Final winner display -->
+      <div class="badge" id="ceremonyBadge">Final Ceremony</div>
+      <div class="winner" id="winnerText"></div>
+    </section>
+  </main>
+
+  <!-- Leaderboard overlay -->
+  <div class="overlay" id="leaderOverlay" aria-hidden="true">
+    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="leaderTitle">
+      <h3 id="leaderTitle">Total Scores After Round <span id="overlayRoundNum">1</span></h3>
+      <div class="ranks" id="ranksContainer"></div>
+      <div class="panel-actions" style="display:flex; gap:8px; justify-content:flex-end; margin-top:6px;">
+        <button id="continueBtn" class="btn positive">Next Round</button>
+        <button id="finishAllBtn" class="btn negative">End Quiz</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- audio (short ding) -->
+  <audio id="ding" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5d494c262d.mp3?filename=correct-2-46134.mp3" type="audio/mpeg">
+    <!-- fallback: none -->
+  </audio>
+
+<script>
+(() => {
+  const TOTAL_ROUNDS = 11;
+  let currentRound = 1;
+  const houseKeys = ['red','blue','green','yellow'];
+  const storageKey = 'house_total_scores_v2';
+
+  // total scores persist across rounds
+  let totalScores = JSON.parse(localStorage.getItem(storageKey)) || { red:0, blue:0, green:0, yellow:0 };
+  // temporary round scores reset each round
+  let roundScores = { red:0, blue:0, green:0, yellow:0 };
+
+  // DOM refs
+  const scoreEls = {
+    red: document.getElementById('score-red'),
+    blue: document.getElementById('score-blue'),
+    green: document.getElementById('score-green'),
+    yellow: document.getElementById('score-yellow')
+  };
+  const roundLabel = document.getElementById('roundLabel');
+  const finishRoundBtn = document.getElementById('finishRoundBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const leaderOverlay = document.getElementById('leaderOverlay');
+  const ranksContainer = document.getElementById('ranksContainer');
+  const overlayRoundNum = document.getElementById('overlayRoundNum');
+  const continueBtn = document.getElementById('continueBtn');
+  const finishAllBtn = document.getElementById('finishAllBtn');
+  const ding = document.getElementById('ding');
+  const ceremony = document.getElementById('ceremony');
+  const winnerText = document.getElementById('winnerText');
+
+  function persistTotal() {
+    localStorage.setItem(storageKey, JSON.stringify(totalScores));
+  }
+
+  // update only round scores in main UI
+  function updateMainDisplay() {
+    houseKeys.forEach(k => { scoreEls[k].textContent = roundScores[k]; });
+  }
+
+  function playDing() {
+    if (!ding) return;
+    const p = ding.play();
+    if (p && p.catch) p.catch(()=>{/* ignore */});
+  }
+
+  // apply change to **roundScores only**
+  function changeRoundScore(house, delta) {
+    if (!roundScores.hasOwnProperty(house)) return;
+    roundScores[house] += Number(delta);
+    updateMainDisplay();
+    playDing();
+  }
+
+  // render leaderboard using totalScores
+  function renderLeaderboard() {
+    // add roundScores to totalScores
+    houseKeys.forEach(h => totalScores[h] += roundScores[h]);
+    persistTotal();
+    roundScores = { red:0, blue:0, green:0, yellow:0 }; // reset round scores
+
+    // update main UI to show fresh round
+    updateMainDisplay();
+
+    const arr = Object.entries(totalScores).sort((a,b) => b[1]-a[1]);
+    ranksContainer.innerHTML = '';
+    arr.forEach(([house,val],idx)=>{
+      const row = document.createElement('div');
+      row.className='rankRow';
+      row.innerHTML=`<div class="name">${idx+1}. ${house.toUpperCase()}</div>
+                     <div class="value">${val}</div>`;
+      ranksContainer.appendChild(row);
+    });
+    overlayRoundNum.textContent = currentRound;
+    leaderOverlay.classList.add('show');
+    leaderOverlay.setAttribute('aria-hidden','false');
+  }
+
+  function showCeremony() {
+    leaderOverlay.classList.remove('show');
+    leaderOverlay.setAttribute('aria-hidden','true');
+    ceremony.classList.add('show');
+
+    const sorted = Object.entries(totalScores).sort((a,b)=>b[1]-a[1]);
+    const winner = sorted[0];
+    winnerText.innerHTML = `🏆 <strong style="font-size:20px">${winner[0].toUpperCase()}</strong> wins with <strong>${winner[1]}</strong> points.`;
+  }
+
+  // delegate clicks
+  document.addEventListener('click', (ev) => {
+    const target = ev.target;
+    const house = target?.getAttribute('data-house');
+    const val = target?.getAttribute('data-value');
+    if (house && val !== null) changeRoundScore(house, Number(val));
+  });
+
+  finishRoundBtn.addEventListener('click', ()=>{ renderLeaderboard(); });
+
+  continueBtn.addEventListener('click', ()=>{
+    leaderOverlay.classList.remove('show');
+    leaderOverlay.setAttribute('aria-hidden','true');
+    currentRound++;
+    if(currentRound > TOTAL_ROUNDS) { showCeremony(); roundLabel.textContent='All rounds finished'; return; }
+    roundLabel.textContent = `Round ${currentRound} of ${TOTAL_ROUNDS}`;
+  });
+
+  finishAllBtn.addEventListener('click', ()=>{
+    showCeremony(); roundLabel.textContent='All rounds finished';
+  });
+
+  saveBtn.addEventListener('click', ()=>{
+    persistTotal();
+    saveBtn.textContent='Saved ✓';
+    setTimeout(()=> saveBtn.textContent='Save Now',900);
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    if(!confirm('Reset all scores?')) return;
+    roundScores={ red:0, blue:0, green:0, yellow:0 };
+    totalScores={ red:0, blue:0, green:0, yellow:0 };
+    persistTotal();
+    updateMainDisplay();
+  });
+
+  // initial display
+  updateMainDisplay();
+  roundLabel.textContent = `Round ${currentRound} of ${TOTAL_ROUNDS}`;
+})();
+
+</script>
+</body>
+</html>
