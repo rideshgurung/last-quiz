@@ -3,43 +3,48 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Multi-Round Scoreboard — Classy</title>
+<title>House Scoreboard — Royal Classic</title>
 <style>
   :root{
-    --bg:#0d0d0d;
-    --panel:#141414;
-    --muted:#bdbdbd;
-    --accent:#4caf50;
+    --bg:#071028;
+    --panel:#0f1b33;
+    --muted:#bfcbdc;
+    --accent:#d4af37; /* gold */
     --glass: rgba(255,255,255,0.03);
+    --card:#14253f;
+    --success:#2fa360;
+    --danger:#c94a3f;
   }
   *{box-sizing:border-box}
+  html,body{height:100%}
   body{
     margin:0;
     min-height:100vh;
-    background:var(--bg);
-    color:#fff;
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg,#051026 0%, #071028 60%);
+    color:var(--muted);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     display:flex;
     flex-direction:column;
     align-items:center;
     padding:28px;
   }
 
-  header{ text-align:center; margin-bottom:18px }
-  h1{ font-size:28px; margin:0 0 6px; letter-spacing:0.6px }
+  header{ text-align:center; margin-bottom:18px; user-select:none; }
+  h1{ font-size:28px; margin:0 0 6px; letter-spacing:0.6px; color:#f6ecd6; }
   .roundLabel{ color:var(--muted); font-size:14px }
 
-  /* layout */
+  main{ width:100%; max-width:1100px; }
+
+  /* grid */
   .grid{
     width:100%;
-    max-width:1100px;
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:18px;
   }
 
   .house{
-    background:var(--panel);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border-radius:12px;
     padding:18px;
     border-left:8px solid transparent;
@@ -48,31 +53,45 @@
     align-items:center;
     gap:12px;
     min-height:170px;
+    box-shadow: 0 8px 24px rgba(3,8,20,0.6);
+    transition: transform .12s ease, box-shadow .12s ease;
   }
-  .house h2{ margin:0; font-size:18px; text-transform:uppercase; letter-spacing:0.6px }
-  .score{ font-size:40px; font-weight:700; margin:0; }
+  .house:hover{ transform: translateY(-4px); box-shadow: 0 14px 40px rgba(3,8,20,0.7); }
+
+  .house h2{ margin:0; font-size:18px; text-transform:uppercase; letter-spacing:0.6px; color:#fff; }
+  .score{ font-size:40px; font-weight:700; margin:0; color:#fff; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
   .btn-row{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center }
   .btn{
     background:transparent;
     border:1px solid rgba(255,255,255,0.06);
-    color:#fff;
+    color:var(--muted);
     padding:8px 12px;
     border-radius:8px;
     cursor:pointer;
     min-width:68px;
     text-align:center;
-    font-weight:600;
-    transition: transform .12s ease, box-shadow .12s ease;
+    font-weight:700;
+    letter-spacing:0.4px;
+    transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
   }
   .btn:active{ transform:scale(.98) }
-  .btn.positive{ box-shadow:0 6px 18px rgba(0,0,0,0.5) }
-  .btn.negative{ opacity:.95; border-color: rgba(255,255,255,0.04) }
+  .btn.positive{
+    background: linear-gradient(180deg, rgba(212,175,55,0.06), rgba(212,175,55,0.02));
+    color:#fff;
+    border-color: rgba(212,175,55,0.22);
+    box-shadow: 0 6px 18px rgba(212,175,55,0.06);
+  }
+  .btn.negative{
+    background: linear-gradient(180deg, rgba(201,74,63,0.03), rgba(201,74,63,0.0));
+    color:#ffdcdc;
+    border-color: rgba(255,255,255,0.03);
+  }
 
-  /* colors for houses */
-  .red{ border-left-color:#ff3b3b }
-  .blue{ border-left-color:#3b7bff }
-  .green{ border-left-color:#45ff3b }
-  .yellow{ border-left-color:#ffe53b; color:#111 }
+  /* house color bars (subtle) */
+  .red{ border-left-color: #e54b3c; }
+  .blue{ border-left-color: #3b82f6; }
+  .green{ border-left-color: #27b36a; }
+  .yellow{ border-left-color: #f1c40f; color:#081018; }
 
   /* controls */
   .controls{
@@ -80,91 +99,96 @@
     display:flex;
     gap:12px;
     align-items:center;
+    justify-content:center;
   }
   .primary{
-    background:linear-gradient(180deg, #277a2a, #1f5f20);
+    background: linear-gradient(180deg, #2b5f9a, #183b61);
     color:#fff;
     border:none;
-    padding:10px 16px;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:800;
+    letter-spacing:0.6px;
+    box-shadow: 0 8px 24px rgba(2,8,20,0.6);
+  }
+  .muted{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.04);
+    color:var(--muted);
+    padding:10px 14px;
     border-radius:10px;
     cursor:pointer;
     font-weight:700;
   }
-  .muted{
-    background:transparent;
-    border:1px solid rgba(255,255,255,0.06);
-    color:var(--muted);
-    padding:8px 12px;
-    border-radius:10px;
-    cursor:pointer;
-  }
 
-  /* leaderboard overlay (keeps main page visible behind) */
+  /* leaderboard overlay */
   .overlay{
     position:fixed;
     inset:0;
     display:flex;
     align-items:center;
     justify-content:center;
-    background:rgba(2,2,2,0.6);
+    background:rgba(4,6,12,0.6);
     z-index:40;
     opacity:0;
     pointer-events:none;
     transition:opacity .22s ease;
+    padding:20px;
   }
-  .overlay.show{ opacity:1; pointer-events:auto }
+  .overlay.show{ opacity:1; pointer-events:auto; }
 
   .panel{
-    width:min(720px,94%);
-    background:var(--panel);
+    width:min(760px,98%);
+    background: linear-gradient(180deg, rgba(24,36,60,0.95), rgba(14,24,40,0.95));
     border-radius:12px;
     padding:22px;
     text-align:left;
-    box-shadow:0 20px 40px rgba(0,0,0,0.6);
-    animation:pop .12s ease;
+    box-shadow:0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    transform: translateY(8px);
+    animation:pop .12s ease forwards;
+    border: 1px solid rgba(212,175,55,0.06);
   }
-  @keyframes pop{ from { transform:translateY(8px); opacity:0 } to { transform:none; opacity:1 } }
+  @keyframes pop{ from { transform:translateY(12px); opacity:0 } to { transform:none; opacity:1 } }
 
-  .panel h3{ margin:0 0 8px; font-size:20px }
-  .ranks{ display:flex; flex-direction:column; gap:8px; margin:10px 0 14px }
-  .rankRow{ display:flex; justify-content:space-between; align-items:center; padding:10px; border-radius:8px; background:var(--glass) }
-  .rankRow .name{ text-transform:uppercase; font-weight:700; letter-spacing:0.6px }
-  .rankRow .value{ font-weight:800; font-size:18px }
+  .panel h3{ margin:0 0 10px; font-size:20px; color:#f6ecd6 }
+  .ranks{ display:flex; flex-direction:column; gap:10px; margin:10px 0 14px }
+  .rankRow{ display:flex; justify-content:space-between; align-items:center; padding:12px; border-radius:8px; background: rgba(255,255,255,0.02); }
+  .rankRow .name{ text-transform:uppercase; font-weight:800; letter-spacing:0.6px; color:#fff }
+  .rankRow .value{ font-weight:900; font-size:18px; color:var(--muted) }
 
   .panel .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:6px }
-  .badge{ font-size:13px; padding:6px 8px; border-radius:8px; background:rgba(255,255,255,0.04) }
 
   /* ceremony */
   .ceremony{
     margin-top:18px;
     width:100%;
-    max-width:720px;
+    max-width:760px;
     text-align:center;
-    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
     border-radius:12px;
     padding:22px;
     display:none;
+    border: 1px solid rgba(212,175,55,0.06);
   }
   .ceremony.show{ display:block }
-  .winner{
-    font-size:22px;
-    font-weight:800;
-    margin:8px 0;
-  }
+  .winner{ font-size:22px; font-weight:800; margin:8px 0; color:#fff }
+  .winner .house{ display:inline-block; padding:6px 12px; border-radius:8px; background: linear-gradient(180deg,#f7e9c6,#ecd78b); color:#0b0b0b; margin-left:8px; font-weight:900; }
 
   /* small screens */
-  @media (max-width:720px){
+  @media (max-width:820px){
     .grid{ grid-template-columns:1fr; }
+    .controls{ flex-direction:column; gap:10px; }
   }
 </style>
 </head>
 <body>
   <header>
-    <h1>House Scoreboard</h1>
+    <h1>House Scoreboard — Royal Classic</h1>
     <div class="roundLabel" id="roundLabel">Round 1 of 11</div>
   </header>
 
-  <main style="width:100%;max-width:1100px;">
+  <main>
     <section class="grid" id="housesGrid">
       <div class="house red" data-house="red">
         <h2>Red</h2>
@@ -215,14 +239,13 @@
       </div>
     </section>
 
-    <div class="controls">
+    <div class="controls" aria-hidden="false">
       <button id="finishRoundBtn" class="primary">Finish Round</button>
       <button id="saveBtn" class="muted">Save Now</button>
       <button id="resetBtn" class="muted">Reset All</button>
     </div>
 
-    <section class="ceremony" id="ceremony">
-      <!-- Final winner display -->
+    <section class="ceremony" id="ceremony" aria-hidden="true">
       <div class="badge" id="ceremonyBadge">Final Ceremony</div>
       <div class="winner" id="winnerText"></div>
     </section>
@@ -233,7 +256,7 @@
     <div class="panel" role="dialog" aria-modal="true" aria-labelledby="leaderTitle">
       <h3 id="leaderTitle">Total Scores After Round <span id="overlayRoundNum">1</span></h3>
       <div class="ranks" id="ranksContainer"></div>
-      <div class="panel-actions" style="display:flex; gap:8px; justify-content:flex-end; margin-top:6px;">
+      <div class="panel-actions" style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
         <button id="continueBtn" class="btn positive">Next Round</button>
         <button id="finishAllBtn" class="btn negative">End Quiz</button>
       </div>
@@ -243,7 +266,6 @@
   <!-- audio (short ding) -->
   <audio id="ding" preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5d494c262d.mp3?filename=correct-2-46134.mp3" type="audio/mpeg">
-    <!-- fallback: none -->
   </audio>
 
 <script>
@@ -251,11 +273,19 @@
   const TOTAL_ROUNDS = 11;
   let currentRound = 1;
   const houseKeys = ['red','blue','green','yellow'];
-  const storageKey = 'house_total_scores_v2';
+  const storageKey = 'house_total_scores_royal_v1';
 
-  // total scores persist across rounds
-  let totalScores = JSON.parse(localStorage.getItem(storageKey)) || { red:0, blue:0, green:0, yellow:0 };
-  // temporary round scores reset each round
+  // load totals (persistent)
+  let totalScores = { red:0, blue:0, green:0, yellow:0 };
+  try {
+    const raw = localStorage.getItem(storageKey);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      houseKeys.forEach(k => { if (typeof parsed[k] === 'number') totalScores[k] = parsed[k]; });
+    }
+  } catch(e){ console.warn('Unable to parse saved totals', e); }
+
+  // round-only scores (reset each round)
   let roundScores = { red:0, blue:0, green:0, yellow:0 };
 
   // DOM refs
@@ -278,104 +308,134 @@
   const ceremony = document.getElementById('ceremony');
   const winnerText = document.getElementById('winnerText');
 
-  function persistTotal() {
-    localStorage.setItem(storageKey, JSON.stringify(totalScores));
+  function persistTotals(){
+    try { localStorage.setItem(storageKey, JSON.stringify(totalScores)); }
+    catch(e){ console.warn('Save failed', e); }
   }
 
-  // update only round scores in main UI
-  function updateMainDisplay() {
+  function updateMainDisplay(){
     houseKeys.forEach(k => { scoreEls[k].textContent = roundScores[k]; });
   }
 
-  function playDing() {
+  function playDing(){
     if (!ding) return;
     const p = ding.play();
     if (p && p.catch) p.catch(()=>{/* ignore */});
   }
 
-  // apply change to **roundScores only**
-  function changeRoundScore(house, delta) {
+  // change only round scores
+  function changeRoundScore(house, delta){
     if (!roundScores.hasOwnProperty(house)) return;
-    roundScores[house] += Number(delta);
+    roundScores[house] = (roundScores[house] || 0) + Number(delta);
+    // clamp (optional): allow negatives if you want; currently allow negative values
     updateMainDisplay();
     playDing();
   }
 
-  // render leaderboard using totalScores
-  function renderLeaderboard() {
-    // add roundScores to totalScores
-    houseKeys.forEach(h => totalScores[h] += roundScores[h]);
-    persistTotal();
-    roundScores = { red:0, blue:0, green:0, yellow:0 }; // reset round scores
+  // build and show leaderboard using totalScores (after adding this round)
+  function renderLeaderboard(){
+    // accumulate this round into totals
+    houseKeys.forEach(h => totalScores[h] = (totalScores[h]||0) + (roundScores[h]||0));
+    // persist totals
+    persistTotals();
 
-    // update main UI to show fresh round
+    // reset round for fresh next round
+    roundScores = { red:0, blue:0, green:0, yellow:0 };
     updateMainDisplay();
 
-    const arr = Object.entries(totalScores).sort((a,b) => b[1]-a[1]);
+    // sort totals
+    const arr = Object.entries(totalScores).sort((a,b)=> b[1] - a[1]);
+
+    // render rows
     ranksContainer.innerHTML = '';
-    arr.forEach(([house,val],idx)=>{
+    arr.forEach(([house, val], idx) => {
       const row = document.createElement('div');
-      row.className='rankRow';
-      row.innerHTML=`<div class="name">${idx+1}. ${house.toUpperCase()}</div>
-                     <div class="value">${val}</div>`;
+      row.className = 'rankRow';
+      row.innerHTML = `
+        <div class="name">${idx+1}. ${house.toUpperCase()}</div>
+        <div class="value">${val}</div>
+      `;
       ranksContainer.appendChild(row);
     });
+
     overlayRoundNum.textContent = currentRound;
     leaderOverlay.classList.add('show');
     leaderOverlay.setAttribute('aria-hidden','false');
   }
 
-  function showCeremony() {
+  function hideLeaderboard(){
     leaderOverlay.classList.remove('show');
     leaderOverlay.setAttribute('aria-hidden','true');
-    ceremony.classList.add('show');
-
-    const sorted = Object.entries(totalScores).sort((a,b)=>b[1]-a[1]);
-    const winner = sorted[0];
-    winnerText.innerHTML = `🏆 <strong style="font-size:20px">${winner[0].toUpperCase()}</strong> wins with <strong>${winner[1]}</strong> points.`;
   }
 
-  // delegate clicks
+  function showCeremony(){
+    hideLeaderboard();
+    ceremony.classList.add('show');
+    // winner from totalScores
+    const sorted = Object.entries(totalScores).sort((a,b)=> b[1] - a[1]);
+    const winner = sorted[0] || ['None',0];
+    winnerText.innerHTML = `
+      🏆 <span style="font-size:18px; color:var(--muted)">Winner:</span>
+      <span class="house">${winner[0].toUpperCase()}</span>
+      <div style="margin-top:8px; color:var(--muted)">with <strong style="color:#fff">${winner[1]}</strong> points</div>
+    `;
+  }
+
+  // event delegation for point buttons
   document.addEventListener('click', (ev) => {
-    const target = ev.target;
-    const house = target?.getAttribute('data-house');
-    const val = target?.getAttribute('data-value');
-    if (house && val !== null) changeRoundScore(house, Number(val));
+    const t = ev.target;
+    if (!t) return;
+    const house = t.getAttribute && t.getAttribute('data-house');
+    const val = t.getAttribute && t.getAttribute('data-value');
+    if (house && val !== null){
+      changeRoundScore(house, Number(val));
+    }
   });
 
-  finishRoundBtn.addEventListener('click', ()=>{ renderLeaderboard(); });
+  finishRoundBtn.addEventListener('click', () => {
+    renderLeaderboard();
+  });
 
-  continueBtn.addEventListener('click', ()=>{
-    leaderOverlay.classList.remove('show');
-    leaderOverlay.setAttribute('aria-hidden','true');
+  continueBtn.addEventListener('click', () => {
+    hideLeaderboard();
     currentRound++;
-    if(currentRound > TOTAL_ROUNDS) { showCeremony(); roundLabel.textContent='All rounds finished'; return; }
+    if (currentRound > TOTAL_ROUNDS){
+      showCeremony();
+      roundLabel.textContent = `All rounds finished`;
+      return;
+    }
     roundLabel.textContent = `Round ${currentRound} of ${TOTAL_ROUNDS}`;
   });
 
-  finishAllBtn.addEventListener('click', ()=>{
-    showCeremony(); roundLabel.textContent='All rounds finished';
+  finishAllBtn.addEventListener('click', () => {
+    // end immediately
+    showCeremony();
+    roundLabel.textContent = `All rounds finished`;
   });
 
-  saveBtn.addEventListener('click', ()=>{
-    persistTotal();
-    saveBtn.textContent='Saved ✓';
-    setTimeout(()=> saveBtn.textContent='Save Now',900);
+  saveBtn.addEventListener('click', () => {
+    persistTotals();
+    saveBtn.textContent = 'Saved ✓';
+    setTimeout(()=> saveBtn.textContent = 'Save Now', 900);
   });
 
-  resetBtn.addEventListener('click', ()=>{
-    if(!confirm('Reset all scores?')) return;
-    roundScores={ red:0, blue:0, green:0, yellow:0 };
-    totalScores={ red:0, blue:0, green:0, yellow:0 };
-    persistTotal();
+  resetBtn.addEventListener('click', () => {
+    if (!confirm('Reset all scores? This clears saved totals too.')) return;
+    roundScores = { red:0, blue:0, green:0, yellow:0 };
+    totalScores = { red:0, blue:0, green:0, yellow:0 };
+    persistTotals();
     updateMainDisplay();
+    hideLeaderboard();
+    ceremony.classList.remove('show');
+    currentRound = 1;
+    roundLabel.textContent = `Round ${currentRound} of ${TOTAL_ROUNDS}`;
   });
 
-  // initial display
+  // initial
   updateMainDisplay();
   roundLabel.textContent = `Round ${currentRound} of ${TOTAL_ROUNDS}`;
-})();
 
+})();
 </script>
 </body>
 </html>
